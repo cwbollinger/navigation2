@@ -62,13 +62,23 @@ DWBLocalPlanner::DWBLocalPlanner(
   goal_checker_loader_("dwb_core", "dwb_core::GoalChecker"),
   critic_loader_("dwb_core", "dwb_core::TrajectoryCritic")
 {
-  node_->declare_parameter("critics");
-  node_->declare_parameter("prune_plan", rclcpp::ParameterValue(true));
-  node_->declare_parameter("prune_distance", rclcpp::ParameterValue(1.0));
-  node_->declare_parameter("debug_trajectory_details", rclcpp::ParameterValue(false));
-  node_->declare_parameter("trajectory_generator_name", rclcpp::ParameterValue(std::string("dwb_plugins::StandardTrajectoryGenerator")));
-  node_->declare_parameter("goal_checker_name", rclcpp::ParameterValue(std::string("dwb_plugins::SimpleGoalChecker")));
-  node_->declare_parameter("use_dwa", rclcpp::ParameterValue(false));
+  auto params = {
+	  rclcpp::Parameter("critics"),
+	  rclcpp::Parameter("prune_plan", true),
+	  rclcpp::Parameter("prune_distance", 1.0),
+	  rclcpp::Parameter("debug_trajectory_details", false),
+	  rclcpp::Parameter("trajectory_generator_name", std::string("dwb_plugins::StandardTrajectoryGenerator")),
+	  rclcpp::Parameter("goal_checker_name", std::string("dwb_plugins::SimpleGoalChecker")),
+	  rclcpp::Parameter("use_dwa", false)
+  };
+  node_->set_parameters(params);
+  //node_->declare_parameter("critics");
+  //node_->declare_parameter("prune_plan", rclcpp::ParameterValue(true));
+  //node_->declare_parameter("prune_distance", rclcpp::ParameterValue(1.0));
+  //node_->declare_parameter("debug_trajectory_details", rclcpp::ParameterValue(false));
+  //node_->declare_parameter("trajectory_generator_name", rclcpp::ParameterValue(std::string("dwb_plugins::StandardTrajectoryGenerator")));
+  //node_->declare_parameter("goal_checker_name", rclcpp::ParameterValue(std::string("dwb_plugins::SimpleGoalChecker")));
+  //node_->declare_parameter("use_dwa", rclcpp::ParameterValue(false));
 }
 
 nav2_lifecycle::CallbackReturn
@@ -160,8 +170,8 @@ DWBLocalPlanner::loadCritics()
     std::string plugin_name = critic_names[i];
     std::string plugin_class;
 
-    node_->declare_parameter(plugin_name + "/class", rclcpp::ParameterValue(plugin_name));
-    node_->get_parameter(plugin_name + "/class", plugin_class);
+    //node_->declare_parameter(plugin_name + "/class", rclcpp::ParameterValue(plugin_name));
+    node_->get_parameter_or_set(plugin_name + "/class", plugin_class, plugin_name);
 
     plugin_class = resolveCriticClassName(plugin_class);
 
@@ -190,20 +200,34 @@ DWBLocalPlanner::loadBackwardsCompatibleParameters()
   critic_names.push_back("PathDist");           // prefers trajectories on global path
   critic_names.push_back("GoalDist");           // prefers trajectories that go towards
                                                 //   (local) goal, based on wave propagation
-  node_->set_parameters({rclcpp::Parameter("critics", critic_names)});
+  node_->set_parameters({
+    rclcpp::Parameter("critics", critic_names),
+    rclcpp::Parameter("path_distance_bias"),
+    rclcpp::Parameter("goal_distance_bias"),
+    rclcpp::Parameter("occdist_scale"),
+    rclcpp::Parameter("max_scaling_factor"),
+    rclcpp::Parameter("scaling_speed"),
+    rclcpp::Parameter("PathAlign.scale"),
+    rclcpp::Parameter("GoalAlign.scale"),
+    rclcpp::Parameter("PathDist.scale"),
+    rclcpp::Parameter("GoalDist.scale"),
+    rclcpp::Parameter("ObstacleFootprint.scale"),
+    rclcpp::Parameter("ObstacleFootprint.max_scaling_factor"),
+    rclcpp::Parameter("ObstacleFootprint.scaling_speed"),
+  });
   /* *INDENT-OFF* */
-  node_->declare_parameter("path_distance_bias");
-  node_->declare_parameter("goal_distance_bias");
-  node_->declare_parameter("occdist_scale");
-  node_->declare_parameter("max_scaling_factor");
-  node_->declare_parameter("scaling_speed");
-  node_->declare_parameter("PathAlign.scale");
-  node_->declare_parameter("GoalAlign.scale");
-  node_->declare_parameter("PathDist.scale");
-  node_->declare_parameter("GoalDist.scale");
-  node_->declare_parameter("ObstacleFootprint.scale");
-  node_->declare_parameter("ObstacleFootprint.max_scaling_factor");
-  node_->declare_parameter("ObstacleFootprint.scaling_speed");
+  //node_->declare_parameter("path_distance_bias");
+  //node_->declare_parameter("goal_distance_bias");
+  //node_->declare_parameter("occdist_scale");
+  //node_->declare_parameter("max_scaling_factor");
+  //node_->declare_parameter("scaling_speed");
+  //node_->declare_parameter("PathAlign.scale");
+  //node_->declare_parameter("GoalAlign.scale");
+  //node_->declare_parameter("PathDist.scale");
+  //node_->declare_parameter("GoalDist.scale");
+  //node_->declare_parameter("ObstacleFootprint.scale");
+  //node_->declare_parameter("ObstacleFootprint.max_scaling_factor");
+  //node_->declare_parameter("ObstacleFootprint.scaling_speed");
 
   nav_2d_utils::moveParameter(node_, "path_distance_bias", "PathAlign.scale", 32.0, false);
   nav_2d_utils::moveParameter(node_, "goal_distance_bias", "GoalAlign.scale", 24.0, false);

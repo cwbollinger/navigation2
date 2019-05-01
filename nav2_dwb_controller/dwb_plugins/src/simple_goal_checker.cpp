@@ -47,11 +47,11 @@ SimpleGoalChecker::SimpleGoalChecker()
 
 void SimpleGoalChecker::initialize(const nav2_lifecycle::LifecycleNode::SharedPtr & nh)
 {
-  nh->declare_parameter("xy_goal_tolerance", rclcpp::ParameterValue(0.25));
-  nh->declare_parameter("yaw_goal_tolerance", rclcpp::ParameterValue(0.25));
+  //nh->declare_parameter("xy_goal_tolerance", rclcpp::ParameterValue(0.25));
+  //nh->declare_parameter("yaw_goal_tolerance", rclcpp::ParameterValue(0.25));
 
-  nh->get_parameter("xy_goal_tolerance", xy_goal_tolerance_);
-  nh->get_parameter("yaw_goal_tolerance", yaw_goal_tolerance_);
+  nh->get_parameter_or_set("xy_goal_tolerance", xy_goal_tolerance_, 0.25);
+  nh->get_parameter_or_set("yaw_goal_tolerance", yaw_goal_tolerance_, 0.25);
 
   xy_goal_tolerance_sq_ = xy_goal_tolerance_ * xy_goal_tolerance_;
 }

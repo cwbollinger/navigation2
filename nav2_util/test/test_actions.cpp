@@ -209,7 +209,8 @@ TEST_F(ActionTest, test_simple_action_with_feedback)
   int feedback_sum = 0;
 
   // A callback to accumulate the intermediate values
-  auto feedback_callback = [&feedback_sum](
+  auto opts = rclcpp_action::Client<Fibonacci>::SendGoalOptions();
+  opts.feedback_callback = [&feedback_sum](
     rclcpp_action::ClientGoalHandle<Fibonacci>::SharedPtr /*goal_handle*/,
     const std::shared_ptr<const Fibonacci::Feedback> feedback)
     {
@@ -221,7 +222,7 @@ TEST_F(ActionTest, test_simple_action_with_feedback)
   goal.order = 10;
 
   // Send the goal
-  auto future_goal_handle = node_->action_client_->async_send_goal(goal, feedback_callback);
+  auto future_goal_handle = node_->action_client_->async_send_goal(goal, opts);
   ASSERT_EQ(rclcpp::spin_until_future_complete(node_,
     future_goal_handle), rclcpp::executor::FutureReturnCode::SUCCESS);
 

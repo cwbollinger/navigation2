@@ -54,10 +54,10 @@ void StandardTrajectoryGenerator::initialize(const nav2_lifecycle::LifecycleNode
   kinematics_->initialize(nh);
   initializeIterator(nh);
 
-  nh->declare_parameter("sim_time", rclcpp::ParameterValue(1.7));
-  nh->declare_parameter("discretize_by_time", rclcpp::ParameterValue(false));
+  //nh->declare_parameter("sim_time", rclcpp::ParameterValue(1.7));
+  //nh->declare_parameter("discretize_by_time", rclcpp::ParameterValue(false));
 
-  nh->get_parameter("sim_time", sim_time_);
+  nh->get_parameter_or_set("sim_time", sim_time_, 1.7);
   checkUseDwaParam(nh);
 
   /*
@@ -68,7 +68,7 @@ void StandardTrajectoryGenerator::initialize(const nav2_lifecycle::LifecycleNode
    *  two successive points on the trajectory, and angular_sim_granularity is the maximum amount of
    *  angular distance between two successive points.
    */
-  nh->get_parameter("discretize_by_time", discretize_by_time_);
+  nh->get_parameter_or_set("discretize_by_time", discretize_by_time_, false);
   if (discretize_by_time_) {
     time_granularity_ = loadParameterWithDeprecation(
       nh, "time_granularity", "sim_granularity", 0.5);

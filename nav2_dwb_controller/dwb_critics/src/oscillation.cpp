@@ -110,7 +110,7 @@ void OscillationCritic::onInit()
   oscillation_reset_time_ = nav2_util::duration_from_seconds(
     nav_2d_utils::searchAndGetParam(nh_, "oscillation_reset_time", -1.0));
 
-  nh_->declare_parameter(name_ + ".x_only_threshold", rclcpp::ParameterValue(0.05));
+  //nh_->declare_parameter(name_ + ".x_only_threshold", rclcpp::ParameterValue(0.05));
 
   /**
    * Historical Parameter Loading
@@ -119,7 +119,7 @@ void OscillationCritic::onInit()
    * If min_trans_vel is set in the namespace, as it used to be used for trajectory generation, complain then use that.
    * Otherwise, set x_only_threshold_ to 0.05
    */
-  nh_->get_parameter(name_ + ".x_only_threshold", x_only_threshold_);
+  nh_->get_parameter_or_set(name_ + ".x_only_threshold", x_only_threshold_, 0.05);
   // TODO(crdelsey): How to handle searchParam?
   // std::string resolved_name;
   // if (nh_->hasParam("x_only_threshold"))

@@ -97,9 +97,9 @@ StaticLayer::getParameters()
 {
   int temp_lethal_threshold = 0;
 
-  node_->declare_parameter(name_ + "." + "enabled", rclcpp::ParameterValue(true));
+  //node_->declare_parameter(name_ + "." + "enabled", rclcpp::ParameterValue(true));
 
-  node_->get_parameter(name_ + "." + "enabled", enabled_);
+  node_->get_parameter_or_set(name_ + "." + "enabled", enabled_, true);
   node_->get_parameter("track_unknown_space", track_unknown_space_);
   node_->get_parameter("use_maximum", use_maximum_);
   node_->get_parameter("lethal_cost_threshold", temp_lethal_threshold);

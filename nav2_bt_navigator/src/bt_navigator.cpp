@@ -31,7 +31,7 @@ BtNavigator::BtNavigator()
   RCLCPP_INFO(get_logger(), "Creating");
 
   // Declare this node's parameters
-  declare_parameter("bt_xml_filename", rclcpp::ParameterValue(std::string("bt_navigator.xml")));
+  // declare_parameter("bt_xml_filename", rclcpp::ParameterValue());
 }
 
 BtNavigator::~BtNavigator()
@@ -78,7 +78,7 @@ BtNavigator::on_configure(const rclcpp_lifecycle::State & /*state*/)
 
   // Get the BT filename to use from the node parameter
   std::string bt_xml_filename;
-  get_parameter("bt_xml_filename", bt_xml_filename);
+  get_parameter_or_set("bt_xml_filename", bt_xml_filename, std::string("bt_navigator.xml"));
 
   // Read the input BT XML from the specified file into a string
   std::ifstream xml_file(bt_xml_filename);

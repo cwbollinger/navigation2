@@ -238,48 +238,58 @@ Costmap2DROS::getParameters()
   std::vector<std::string> plugin_names{"static_layer", "obstacle_layer", "inflation_layer"};
   std::vector<std::string> plugin_types{"nav2_costmap_2d::StaticLayer", "nav2_costmap_2d::ObstacleLayer", "nav2_costmap_2d::InflationLayer"};
 
-  declare_parameter("always_send_full_costmap", rclcpp::ParameterValue(false));
-  declare_parameter("footprint_padding", rclcpp::ParameterValue(0.01f));
-  declare_parameter("footprint", rclcpp::ParameterValue(std::string("[]")));
-  declare_parameter("global_frame", rclcpp::ParameterValue(std::string("map")));
-  declare_parameter("height", rclcpp::ParameterValue(10));
-  declare_parameter("lethal_cost_threshold", rclcpp::ParameterValue(100));
-  declare_parameter("origin_x", rclcpp::ParameterValue(0.0));
-  declare_parameter("origin_y", rclcpp::ParameterValue(0.0));
-  declare_parameter("plugin_names", rclcpp::ParameterValue(plugin_names));
-  declare_parameter("plugin_types", rclcpp::ParameterValue(plugin_types));
-  declare_parameter("publish_frequency", rclcpp::ParameterValue(1.0));
-  declare_parameter("resolution", rclcpp::ParameterValue(0.1));
-  declare_parameter("robot_base_frame", rclcpp::ParameterValue(std::string("base_link")));
-  declare_parameter("robot_radius", rclcpp::ParameterValue(0.1));
-  declare_parameter("rolling_window", rclcpp::ParameterValue(false));
-  declare_parameter("track_unknown_space", rclcpp::ParameterValue(false));
-  declare_parameter("transform_tolerance", rclcpp::ParameterValue(0.3));
-  declare_parameter("trinary_costmap", rclcpp::ParameterValue(true));
-  declare_parameter("unknown_cost_value", rclcpp::ParameterValue(static_cast<unsigned char>(0xff)));
-  declare_parameter("update_frequency", rclcpp::ParameterValue(5.0));
-  declare_parameter("use_maximum", rclcpp::ParameterValue(false));
-  declare_parameter("width", rclcpp::ParameterValue(10));
+  //declare_parameter("always_send_full_costmap", rclcpp::ParameterValue(false));
+  //declare_parameter("footprint_padding", rclcpp::ParameterValue(0.01f));
+  //declare_parameter("footprint", rclcpp::ParameterValue(std::string("[]")));
+  //declare_parameter("global_frame", rclcpp::ParameterValue(std::string("map")));
+  //declare_parameter("height", rclcpp::ParameterValue(10));
+  //auto lethal_threshold = rclcpp::Parameter("lethal_cost_threshold", rclcpp::ParameterValue(100));
+  auto params = {
+	  rclcpp::Parameter("lethal_cost_threshold", 100),
+	  rclcpp::Parameter("trinary_costmap", true),
+	  rclcpp::Parameter("unknown_cost_value", static_cast<unsigned char>(0xff)),
+	  rclcpp::Parameter("use_maximum", false)
+  };
+  set_parameters(params);
+
+  //declare_parameter("lethal_cost_threshold", rclcpp::ParameterValue(100));
+  //declare_parameter("trinary_costmap", rclcpp::ParameterValue(true));
+  //declare_parameter("unknown_cost_value", rclcpp::ParameterValue(static_cast<unsigned char>(0xff)));
+  //declare_parameter("use_maximum", rclcpp::ParameterValue(false));
+
+  //declare_parameter("origin_x", rclcpp::ParameterValue(0.0));
+  //declare_parameter("origin_y", rclcpp::ParameterValue(0.0));
+  //declare_parameter("plugin_names", rclcpp::ParameterValue(plugin_names));
+  //declare_parameter("plugin_types", rclcpp::ParameterValue(plugin_types));
+  //declare_parameter("publish_frequency", rclcpp::ParameterValue(1.0));
+  //declare_parameter("resolution", rclcpp::ParameterValue(0.1));
+  //declare_parameter("robot_base_frame", rclcpp::ParameterValue(std::string("base_link")));
+  //declare_parameter("robot_radius", rclcpp::ParameterValue(0.1));
+  //declare_parameter("rolling_window", rclcpp::ParameterValue(false));
+  //declare_parameter("track_unknown_space", rclcpp::ParameterValue(false));
+  //declare_parameter("transform_tolerance", rclcpp::ParameterValue(0.3));
+  //declare_parameter("update_frequency", rclcpp::ParameterValue(5.0));
+  //declare_parameter("width", rclcpp::ParameterValue(10));
 
   // Get all of the required parameters
-  get_parameter("always_send_full_costmap", always_send_full_costmap_);
-  get_parameter("footprint", footprint_);
-  get_parameter("footprint_padding", footprint_padding_);
-  get_parameter("global_frame", global_frame_);
-  get_parameter("height", map_height_meters_);
-  get_parameter("origin_x", origin_x_);
-  get_parameter("origin_y", origin_y_);
-  get_parameter("plugin_names", plugin_names_);
-  get_parameter("plugin_types", plugin_types_);
-  get_parameter("publish_frequency", map_publish_frequency_);
-  get_parameter("resolution", resolution_);
-  get_parameter("robot_base_frame", robot_base_frame_);
-  get_parameter("robot_radius", robot_radius_);
-  get_parameter("rolling_window", rolling_window_);
-  get_parameter("track_unknown_space", track_unknown_space_);
-  get_parameter("transform_tolerance", transform_tolerance_);
-  get_parameter("update_frequency", map_update_frequency_);
-  get_parameter("width", map_width_meters_);
+  get_parameter_or_set("always_send_full_costmap", always_send_full_costmap_, false);
+  get_parameter_or_set("footprint", footprint_, std::string("[]"));
+  get_parameter_or_set("footprint_padding", footprint_padding_, 0.01f);
+  get_parameter_or_set("global_frame", global_frame_, std::string("map"));
+  get_parameter_or_set("height", map_height_meters_, 10);
+  get_parameter_or_set("origin_x", origin_x_, 0.0);
+  get_parameter_or_set("origin_y", origin_y_, 0.0);
+  get_parameter_or_set("plugin_names", plugin_names_, plugin_names);
+  get_parameter_or_set("plugin_types", plugin_types_, plugin_types);
+  get_parameter_or_set("publish_frequency", map_publish_frequency_, 1.0);
+  get_parameter_or_set("resolution", resolution_, 0.1);
+  get_parameter_or_set("robot_base_frame", robot_base_frame_, std::string("base_link"));
+  get_parameter_or_set("robot_radius", robot_radius_, 0.1);
+  get_parameter_or_set("rolling_window", rolling_window_, false);
+  get_parameter_or_set("track_unknown_space", track_unknown_space_, false);
+  get_parameter_or_set("transform_tolerance", transform_tolerance_, 0.3);
+  get_parameter_or_set("update_frequency", map_update_frequency_, 5.0);
+  get_parameter_or_set("width", map_width_meters_, 10);
 
   // Semantic checks...
 

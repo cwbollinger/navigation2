@@ -46,8 +46,8 @@ void BaseObstacleCritic::onInit()
 {
   costmap_ = costmap_ros_->getCostmap();
 
-  nh_->declare_parameter(name_ + ".sum_scores", rclcpp::ParameterValue(false));
-  nh_->get_parameter(name_ + ".sum_scores", sum_scores_);
+  //nh_->declare_parameter(name_ + ".sum_scores", rclcpp::ParameterValue(false));
+  nh_->get_parameter_or_set(name_ + ".sum_scores", sum_scores_, false);
 }
 
 double BaseObstacleCritic::scoreTrajectory(const dwb_msgs::msg::Trajectory2D & traj)

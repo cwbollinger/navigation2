@@ -38,9 +38,9 @@ ClearCostmapService::ClearCostmapService(
   reset_value_ = costmap_.getCostmap()->getDefaultValue();
 
   std::vector<std::string> clearable_layers{"obstacle_layer"};
-  node_->declare_parameter("clearable_layers", rclcpp::ParameterValue(clearable_layers));
+  //node_->declare_parameter("clearable_layers", rclcpp::ParameterValue(clearable_layers));
 
-  node_->get_parameter("clearable_layers", clearable_layers_);
+  node_->get_parameter_or_set("clearable_layers", clearable_layers_, clearable_layers);
 
   clear_except_service_ = node_->create_service<ClearExceptRegion>(
     "clear_except_" + costmap_.getName(),

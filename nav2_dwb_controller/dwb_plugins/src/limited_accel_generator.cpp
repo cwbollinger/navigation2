@@ -47,7 +47,7 @@ void LimitedAccelGenerator::initialize(const nav2_lifecycle::LifecycleNode::Shar
 {
   StandardTrajectoryGenerator::initialize(nh);
 
-  nh->declare_parameter("sim_period");
+  nh->set_parameters({rclcpp::Parameter("sim_period")});
 
   if (nh->get_parameter("sim_period", acceleration_time_)) {
   } else {

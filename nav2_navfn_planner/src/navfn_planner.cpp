@@ -50,8 +50,8 @@ NavfnPlanner::NavfnPlanner()
   RCLCPP_INFO(get_logger(), "Creating");
 
   // Declare this node's parameters
-  declare_parameter("tolerance", rclcpp::ParameterValue(0.0));
-  declare_parameter("use_astar", rclcpp::ParameterValue(false));
+  //declare_parameter("tolerance", rclcpp::ParameterValue(0.0));
+  //declare_parameter("use_astar", rclcpp::ParameterValue(false));
 }
 
 NavfnPlanner::~NavfnPlanner()
@@ -65,8 +65,8 @@ NavfnPlanner::on_configure(const rclcpp_lifecycle::State & state)
   RCLCPP_INFO(get_logger(), "Configuring");
 
   // Initialize parameters
-  get_parameter("tolerance", tolerance_);
-  get_parameter("use_astar", use_astar_);
+  get_parameter_or_set("tolerance", tolerance_, 0.0);
+  get_parameter_or_set("use_astar", use_astar_, false);
 
   getCostmap(costmap_);
   RCLCPP_DEBUG(get_logger(), "Costmap size: %d,%d",

@@ -44,11 +44,11 @@ void XYThetaIterator::initialize(
 {
   kinematics_ = kinematics;
 
-  nh->declare_parameter("vx_samples", rclcpp::ParameterValue(20));
-  nh->declare_parameter("vy_samples", rclcpp::ParameterValue(5));
+  //nh->declare_parameter("vx_samples", rclcpp::ParameterValue(20));
+  //nh->declare_parameter("vy_samples", rclcpp::ParameterValue(5));
 
-  nh->get_parameter("vx_samples", vx_samples_);
-  nh->get_parameter("vy_samples", vy_samples_);
+  nh->get_parameter_or_set("vx_samples", vx_samples_, 20);
+  nh->get_parameter_or_set("vy_samples", vy_samples_, 5);
 
   vtheta_samples_ = nav_2d_utils::loadParameterWithDeprecation(nh, "vtheta_samples", "vth_samples",
       20);

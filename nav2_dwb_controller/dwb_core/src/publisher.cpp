@@ -53,12 +53,21 @@ namespace dwb_core
 DWBPublisher::DWBPublisher(nav2_lifecycle::LifecycleNode::SharedPtr node)
 : node_(node)
 {
-  node_->declare_parameter("publish_evaluation", rclcpp::ParameterValue(true));
-  node_->declare_parameter("publish_global_plan", rclcpp::ParameterValue(true));
-  node_->declare_parameter("publish_transformed_plan", rclcpp::ParameterValue(true));
-  node_->declare_parameter("publish_local_plan", rclcpp::ParameterValue(true));
-  node_->declare_parameter("publish_trajectories", rclcpp::ParameterValue(true));
-  node_->declare_parameter("publish_cost_grid_pc", rclcpp::ParameterValue(false));
+  auto params = {
+	  rclcpp::Parameter("publish_evaluation", true),
+          rclcpp::Parameter("publish_global_plan", true),
+          rclcpp::Parameter("publish_transformed_plan", true),
+          rclcpp::Parameter("publish_local_plan", true),
+          rclcpp::Parameter("publish_trajectories", true),
+          rclcpp::Parameter("publish_cost_grid_pc", false)
+  };
+  node_->set_parameters(params);
+  //node_->declare_parameter("publish_evaluation", rclcpp::ParameterValue(true));
+  //node_->declare_parameter("publish_global_plan", rclcpp::ParameterValue(true));
+  //node_->declare_parameter("publish_transformed_plan", rclcpp::ParameterValue(true));
+  //node_->declare_parameter("publish_local_plan", rclcpp::ParameterValue(true));
+  //node_->declare_parameter("publish_trajectories", rclcpp::ParameterValue(true));
+  //node_->declare_parameter("publish_cost_grid_pc", rclcpp::ParameterValue(false));
 }
 
 nav2_lifecycle::CallbackReturn
