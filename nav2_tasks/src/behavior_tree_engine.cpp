@@ -17,6 +17,7 @@
 #include <string>
 #include "geometry_msgs/msg/pose2_d.hpp"
 #include "behaviortree_cpp/blackboard/blackboard_local.h"
+#include "nav2_tasks/bt_ros_logger.h"
 #include "nav2_tasks/navigate_to_pose_action.hpp"
 #include "nav2_tasks/compute_path_to_pose_action.hpp"
 #include "nav2_tasks/follow_path_action.hpp"
@@ -45,6 +46,9 @@ TaskStatus BehaviorTreeEngine::run(
   // The complete behavior tree that results from parsing the incoming XML. When the tree goes
   // out of scope, all the nodes are destroyed
   BT::Tree tree = BT::buildTreeFromText(factory_, behavior_tree_xml, blackboard);
+
+  std::string logging_topic("bt_logging");
+  BT::RosLogger(tree.root_node, node_, logging_topic);
 
   rclcpp::WallRate loopRate(loopTimeout);
   BT::NodeStatus result = BT::NodeStatus::RUNNING;

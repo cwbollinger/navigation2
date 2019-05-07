@@ -27,6 +27,7 @@ set(library_name ${PROJECT_NAME})
 
 add_library(${library_name} SHARED
   src/behavior_tree_engine.cpp
+  src/bt_ros_logger.cpp
 )
 
 set(dependencies
